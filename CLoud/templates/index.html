@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row g-0 main-container">
+    <!-- Left Column: Item List -->
+    <div class="col-md-4 col-lg-3">
+        <div class="sidebar">
+            <!-- Search Bar -->
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search">
+                <button class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i></button>
+            </div>
+            <!-- New Item Button -->
+            <div class="d-grid mb-3">
+                 <button type="button" class="btn btn-light text-start p-2 border" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                    <i class="bi bi-plus-lg me-2"></i> New
+                 </button>
+            </div>
+            <!-- Item List -->
+            <div class="list-group list-group-flush item-list">
+                {% for item in items %}
+                    <a href="{{ url_for('index', item_id=item.id) }}" 
+                       class="list-group-item list-group-item-action {% if selected_item and selected_item.id == item.id %}active{% endif %}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1 fw-bold">{{ item.title }}</h5>
+                            <i class="bi bi-chevron-right"></i>
+                        </div>
+                        <p class="mb-1 small text-muted">{{ item.description[:45] }}{% if item.description|length > 45 %}...{% endif %}</p>
+                        <small>{{ item.status }}</small>
+                    </a>
+                {% else %}
+                    <div class="list-group-item">No items found.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Item Details -->
+    <div class="col-md-8 col-lg-9">
+       <div class="content-pane">
+        {% if selected_item %}
+            <!-- Details Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                <h4 class="mb-0 fw-normal">{{ selected_item.title }}</h4>
+                <div>
+                    <button class="btn btn-sm btn-light border"><i class="bi bi-pencil-fill"></i></button>
+                    <button class="btn btn-sm btn-light border"><i class="bi bi-trash-fill"></i></button>
+                </div>
+            </div>
+            
+            <!-- Details Content Grid -->
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <label class="text-muted small">Title</label>
+                    <p class="fw-bold">{{ selected_item.title }}</p>
+                </div>
+                 <div class="col-md-6 mb-4">
+                    <label class="text-muted small">Description</label>
+                    <p>{{ selected_item.description }}</p>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label class="text-muted small">Status</label>
+                    <p>{{ selected_item.status }}</p>
+                </div>
+                 <div class="col-md-6 mb-4">
+                    <label class="text-muted small">Location</label>
+                    <p>{{ selected_item.location }}</p>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label class="text-muted small">Date</label>
+                    <p>{{ selected_item.created_at.strftime('%m/%d/%Y') }}</p>
+                </div>
+                 <div class="col-md-6 mb-4">
+                    <label class="text-muted small">Contact</label>
+                    <p>{{ selected_item.contact }}</p>
+                </div>
+            </div>
+            <label class="text-muted small">Attachments</label>
+            <div class="mt-2 border rounded p-2 text-center">
+                 {% if selected_item.images %}
+                    <div id="attachmentCarousel" class="carousel slide" data-bs-ride="carousel">
+                      <div class="carousel-inner">
+                        {% for image in selected_item.images %}
+                        <div class="carousel-item {% if loop.first %}active{% endif %}">
+                          <img src="data:image/jpeg;base64,{{ image.get_b64_image() }}" class="d-block w-100" style="max-height: 400px; object-fit: contain;" alt="Attachment {{ loop.index }}">
+                        </div>
+                        {% endfor %}
+                      </div>
+                      {% if selected_item.images|length > 1 %}
+                      <button class="carousel-control-prev" type="button" data-bs-target="#attachmentCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1) grayscale(100);"></span>
+                        <span class="visually-hidden">Previous</span>
+                      </button>
+                      <button class="carousel-control-next" type="button" data-bs-target="#attachmentCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1) grayscale(100);"></span>
+                        <span class="visually-hidden">Next</span>
+                      </button>
+                      {% endif %}
+                    </div>
+                 {% else %}
+                    <div class="p-5 bg-light text-center text-muted">
+                        <p class="mb-0">There is nothing attached.</p>
+                    </div>
+                 {% endif %}
+            </div>
+
+        {% else %}
+            <div class="d-flex h-100 align-items-center justify-content-center">
+                <div class="text-center text-muted">
+                    <i class="bi bi-hand-index fs-1"></i>
+                    <h5 class="mt-3">Select an Item</h5>
+                    <p>Please select an item from the list on the left to see its details.</p>
+                </div>
+            </div>
+        {% endif %}
+       </div>
+    </div>
+</div>
+{% endblock %}

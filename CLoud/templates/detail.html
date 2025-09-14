@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}{{ item.title }}{% endblock %}
+{% block content %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3>{{ item.title }}</h3>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Back to List</a>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 text-center">
+                    <img src="data:image/jpeg;base64,{{ item.get_b64_image() }}" class="img-fluid rounded border" alt="{{ item.title }}">
+                </div>
+                <div class="col-md-6">
+                    <h5>AI Generated Description:</h5>
+                    <p>{{ item.description }}</p>
+                    <hr>
+                    <p><strong>Status:</strong> {{ item.status }}</p>
+                    <p><strong>Location Found:</strong> {{ item.location }}</p>
+                    <p><strong>Date Found:</strong> {{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                    <p><strong>Contact Info:</strong> {{ item.contact }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+    

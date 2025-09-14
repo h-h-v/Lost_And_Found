@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Add New Item{% endblock %}
+{% block content %}
+    <h2>Report a Found Item</h2>
+    <p>Upload a clear photo of the item. The description will be generated automatically by AI.</p>
+    <form method="post" action="{{ url_for('analyze_image') }}" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="title" class="form-label">Title (e.g., "iPhone 13", "Set of Keys")</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+        <div class="mb-3">
+            <label for="file" class="form-label">Image of Item</label>
+            <input class="form-control" type="file" id="file" name="file" required>
+        </div>
+        <div class="mb-3">
+            <label for="location" class="form-label">Location Found</label>
+            <input type="text" class="form-control" id="location" name="location" required>
+        </div>
+        <div class="mb-3">
+            <label for="contact" class="form-label">Your Contact Info (Phone or Email)</label>
+            <input type="text" class="form-control" id="contact" name="contact" required>
+        </div>
+         <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-select" id="status" name="status">
+                <option>Found</option>
+                <option>Claimed</option>
+                <option>Archived</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Item</button>
+    </form>
+{% endblock %}

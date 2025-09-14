@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}{{ item.title }}{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <!-- Details Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <h4 class="mb-0 fw-normal">{{ item.title }}</h4>
+        <a href="{{ url_for('mobile_list') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left"></i> Back to List</a>
+    </div>
+    
+    <!-- Details Content Grid -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <label class="text-muted small">Title</label>
+            <p class="fw-bold">{{ item.title }}</p>
+        </div>
+         <div class="col-md-6 mb-4">
+            <label class="text-muted small">Description</label>
+            <p>{{ item.description }}</p>
+        </div>
+        <div class="col-md-6 mb-4">
+            <label class="text-muted small">Status</label>
+            <p>{{ item.status }}</p>
+        </div>
+         <div class="col-md-6 mb-4">
+            <label class="text-muted small">Location</label>
+            <p>{{ item.location }}</p>
+        </div>
+        <div class="col-md-6 mb-4">
+            <label class="text-muted small">Date</label>
+            <p>{{ item.created_at.strftime('%m/%d/%Y') }}</p>
+        </div>
+         <div class="col-md-6 mb-4">
+            <label class="text-muted small">Contact</label>
+            <p>{{ item.contact }}</p>
+        </div>
+    </div>
+    <label class="text-muted small">Attachments</label>
+    <div class="mt-2 border rounded p-2 text-center">
+         {% if item.images %}
+            <div id="attachmentCarousel" class="carousel slide" data-bs-ride="carousel">
+              <div class="carousel-inner">
+                {% for image in item.images %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                  <img src="data:image/jpeg;base64,{{ image.get_b64_image() }}" class="d-block w-100" style="max-height: 400px; object-fit: contain;" alt="Attachment {{ loop.index }}">
+                </div>
+                {% endfor %}
+              </div>
+              {% if item.images|length > 1 %}
+              <button class="carousel-control-prev" type="button" data-bs-target="#attachmentCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1) grayscale(100);"></span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#attachmentCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1) grayscale(100);"></span>
+              </button>
+              {% endif %}
+            </div>
+         {% else %}
+            <p class="m-5">There is nothing attached.</p>
+         {% endif %}
+    </div>
+</div>
+{% endblock %}
